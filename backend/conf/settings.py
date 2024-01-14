@@ -9,8 +9,21 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+
+
+DEBUG = bool(os.environ.get('BACKEND_DEBUG', True))
+ALLOWED_HOSTS = os.environ.get('BACKEND_ALLOWED_HOSTS', '127.0.0.1 localhost').split(' ')
+SECRET_KEY = os.environ.get('BACKEND_SECRET_KEY', 'django-insecure-xrfrg)3f7%dr$4eifgf$y#1^0e7jrh7ih7vf!xd2o+l9e)##l5')
+
+DATABASE_HOST = os.environ.get('BACKEND_DB_HOST')
+DATABASE_PORT = os.environ.get('BACKEND_DB_PORT')
+DATABASE_NAME = os.environ.get('BACKEND_DB_NAME')
+DATABASE_USERNAME = os.environ.get('BACKEND_DB_USERNAME')
+DATABASE_PASSWORD = os.environ.get('BACKEND_DB_PASSWORD')
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +33,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xrfrg)3f7%dr$4eifgf$y#1^0e7jrh7ih7vf!xd2o+l9e)##l5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -82,12 +92,27 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DATABASE_HOST and DATABASE_PORT and DATABASE_NAME and DATABASE_USERNAME and DATABASE_PASSWORD:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': DATABASE_NAME,
+            'USER': DATABASE_USERNAME,
+            'PASSWORD': DATABASE_PASSWORD,
+            'HOST': DATABASE_HOST,  # Set the PostgreSQL server host (default: localhost)
+            'PORT': DATABASE_PORT,       # Set the PostgreSQL server port (default: 5432)
+        }
     }
-}
+
+else:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -125,7 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = BASE_DIR / 'static'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

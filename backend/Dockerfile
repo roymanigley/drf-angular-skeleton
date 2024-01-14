@@ -14,11 +14,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 RUN mkdir -p static
+RUN mkdir -p media
 
 # Create a dedicated user for Nginx
 RUN adduser -D -H -u 1001 -s /sbin/nologin appuser
 
 RUN chown appuser static -R
+RUN chown appuser media -R
+
 USER appuser
 
 # Expose port 8000

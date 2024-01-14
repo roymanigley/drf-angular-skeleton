@@ -24,8 +24,9 @@ from api import views
 
 router = DefaultRouter()
 router.register('api/task', views.TaskView, 'task')
+router.register('api/file', views.FileView, 'file')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-] + router.urls + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + router.urls + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

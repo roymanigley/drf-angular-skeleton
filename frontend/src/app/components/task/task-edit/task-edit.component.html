@@ -1,0 +1,22 @@
+<div *ngIf="formGroup">
+    <form [formGroup]="formGroup" (ngSubmit)="save()">
+        
+        <p><label for="title">title</label></p>
+        <p *ngIf="formGroup.controls['title'].invalid && formGroup.controls['title'].touched">Title is required.</p>
+        <p><input id="title" type="text" formControlName="title"></p>
+        
+        <p><label for="description">description</label></p>
+        <p *ngIf="formGroup.controls['description'].invalid && formGroup.controls['description'].touched">Description is required.</p>
+        <textarea id="description" formControlName="description" rows="5"></textarea>
+        
+        <p><label for="status">status</label></p>
+        <p *ngIf="formGroup.controls['status'].invalid && formGroup.controls['status'].touched">Status is required.</p>
+        <p><select id="status" formControlName="status">
+            <option *ngFor="let s of status">{{ s }}</option>
+        </select></p>
+        
+
+        <button [disabled]="formGroup.invalid" type="submit">save</button>
+        <button type="button" onclick="history.back()">cancel</button>
+    </form>
+</div>

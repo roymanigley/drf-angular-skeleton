@@ -15,10 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework.routers import DefaultRouter
+
+from django.views.generic import TemplateView
 
 from api import views
 
@@ -27,6 +29,8 @@ router.register('api/task', views.TaskView, 'task')
 router.register('api/file', views.FileView, 'file')
 
 urlpatterns = [
+    path('auth/', include('social_django.urls', namespace='social')),
     path('admin/', admin.site.urls),
+    path('login', TemplateView.as_view(template_name='login.html')),
 ] + router.urls + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

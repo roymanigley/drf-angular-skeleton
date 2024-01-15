@@ -1,0 +1,12 @@
+<html>
+	<head>
+		
+	</head>
+	<body>
+		<a href="{% url 'social:begin' 'keycloak' %}?next={{ request.path }}">Login with KeyCloack</a>
+		<script>
+			location.href = "{% url 'social:begin' 'keycloak' %}?next={{ request.path }}";
+		</script>
+	</body>
+</html>
+

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'rest_framework',
     'api',
 ]
@@ -56,6 +57,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'social_core.backends.keycloak.KeycloakOAuth2',
+    ),
 }
 
 MIDDLEWARE = [
@@ -66,14 +70,31 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.keycloak.KeycloakOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_KEYCLOAK_KEY = 'web-app'
+SOCIAL_AUTH_KEYCLOAK_SECRET = 'O2cMP4bhmKAteGh858EmIA6st2gvwF8V'
+# SOCIAL_AUTH_KEYCLOAK_URL = 'http://localhost:8080/auth/realms/django_social_login_keycloak'
+
+SOCIAL_AUTH_KEYCLOAK_PUBLIC_KEY = \
+    'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoLdJAehpmoc/78Xvyvo2hHXs0f8jrKtMzJ9aWsTozt2Q1AEInWPdTc4titQdPsbUV/tXax76eKZ/0TUU4oZ/uamhw6eO8vdloMcwHnf2O0zI/C/PUT/X855I6eZooNaF90OKf7Fx4OR3BQiIP0UXBNgLaIImaoT40FfcCI+o2xELAeXM4RAGUMBHsbKvMb9m9v3OlXFNXaT5Snox7P549AfZmgvT4FAYG2OJB87HgekRfKu5QcBBSihdmoP2wM8TCd3M82Yrh8GNgIrMKfduXgqaYPajRwNH3q0AR7+Jn0PMoWfHmsvlH/xShM3FLUE26WS/d1VWGAClXX2y4lO4VwIDAQAB'
+SOCIAL_AUTH_KEYCLOAK_AUTHORIZATION_URL = \
+    'http://localhost:8080/realms/django_social_login_keycloak/protocol/openid-connect/auth'
+SOCIAL_AUTH_KEYCLOAK_ACCESS_TOKEN_URL = \
+    'http://localhost:8080/realms/django_social_login_keycloak/protocol/openid-connect/token'
 
 ROOT_URLCONF = 'conf.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ BASE_DIR / 'templates' ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
